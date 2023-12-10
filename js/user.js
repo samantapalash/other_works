@@ -1,5 +1,5 @@
-var startValue = 2;
-var limitValue = 2;
+var startValue = 20;
+var limitValue = 20;
 var totalInsertRow = 0;
 var start = startValue;
 var limit = startValue;
@@ -22,6 +22,11 @@ $(document).ready(function(){
 		let userId = $(this).attr('id');
 		$('#edit_id').val(userId);
 		getUserData(userId);
+	});
+	$(document).on('click', '.sort_data', function(){
+		let sortBy = $(this).attr('id');
+		let sortOn = $(this).attr('data-id');
+		getUserSortData(sortBy,sortOn);
 	});
 	$(document).on('change', '#file', function(){
 		const file = this.files[0];
@@ -239,6 +244,20 @@ $(document).ready(function(){
 			}
 		});
 	}
+	function getUserSortData(sortBy,sortOn) {
+		let sessionId = $("#session_id").val();
+		$.ajax({
+			type: 'POST',
+			url: "allFunctions.php",
+			data: {sort_by:sortBy,sort_on:sortOn,sort_data: 1,start:start,session_id: sessionId},
+			success: function(response){
+				let nowSortOn = (sortOn == "SORT_DESC") ? "SORT_ASC" : "SORT_DESC";
+				$("#"+sortBy).attr('data-id',nowSortOn);
+				var obj = jQuery.parseJSON(response);
+				ajaxresponse(response);
+			}
+		});
+	}
 	function ajaxresponse(response){
 		var obj = jQuery.parseJSON(response);
 		//console.log(obj.all_data[0]);
@@ -261,19 +280,23 @@ $(window).scroll(function() {
 	   /*console.log("start",start);
 	   console.log("limit",limit);
 	   console.log("totalInsertRow",totalInsertRow);*/
-		//if (start < totalInsertRow) {
+		if (start < totalInsertRow) {
 			$.ajax({
 				type: 'POST',
 				url: "allFunctions.php",
 				data: {start:start,limit:limit,scroll_data: 1,session_id:sessionId},
 				success: function(response){
 					start = parseInt(start) + parseInt(limit);
+					/*let newStart = parseInt(start) + parseInt(limit);
+					if(newStart < totalInsertRow) {
+						start = newStart;
+					}*/
 					var obj = jQuery.parseJSON(response);
 					let html = formHtml(obj);
 					$('#myTable tbody').append(html);
 				}
 			});
-		//}
+		}
 	}
 });
 function formHtml(obj) {

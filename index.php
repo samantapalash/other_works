@@ -40,7 +40,11 @@
 				</div>
 				<div class="col-lg-4 col-md-4 col-sm-4 hedp">
 					<p>Gender*</p>
-					<input type="text" class="form-control formstyle" name="gender" id="gender" placeholder="Enter Your Gender">
+					<select class="form-control formstyle" name="gender" id="gender">
+						<option value="Male">Male</option>
+						<option value="Female">Female</option>
+					</select>
+					<!--<input type="text" class="form-control formstyle" name="gender" id="gender" placeholder="Enter Your Gender">-->
 				</div>
 			</div>
 			<div class="col-md-12"><input type="submit" value="Submit" class="submitButton" id="getDataBtn"></div>
@@ -57,8 +61,8 @@
 			<div id="list-div">
 				<table id="myTable">
 					<thead>
-						<th>ID</th>
-						<th>Name</th>
+						<th><a href="javascript:void(0)" id="sort_by_id" data-id="SORT_DESC" class="sort_data">ID</a></th>
+						<th><a href="javascript:void(0)" id="sort_by_name" data-id="SORT_DESC" class="sort_data">Name</a></th>
 						<th>Image</th>
 						<th>Address</th>
 						<th>Gender</th>

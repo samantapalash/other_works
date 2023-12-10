@@ -1,7 +1,7 @@
 <?php
 session_start();
 $start = 0;
-$limit = 2;
+$limit = 20;
 $sessionId = $_SESSION['session_id'];
 $incomingSessionData = $_POST['session_id'];
 //$previousSessionData = isset($_SESSION['prev_session_id']) ? $_SESSION['prev_session_id'] : 0;
@@ -95,4 +95,23 @@ if(isset($_POST['add_edit']) && $_POST['add_edit'] == 1) { //For add a new user
 		$returnArray['message'] = 'Invalid ID entered.';
 		echo json_encode($returnArray); exit;
 	}
+} else if(isset($_POST['sort_data']) && $_POST['sort_data'] == 1) { //Sort user data from the list
+	$sortBy = $_POST['sort_by'];
+	if($sortBy == "sort_by_id") {
+		$sortBy = 'id';
+	} else if($sortBy == "sort_by_name") {
+		$sortBy = 'name';
+	}
+	$sortOn = $_POST['sort_on'];
+	$start = $_POST['start'];
+	//print_r($storedData);
+	if($sortOn == 'SORT_DESC') {
+		array_multisort(array_column($storedData, $sortBy), SORT_DESC, $storedData);
+	} else {
+		array_multisort(array_column($storedData, $sortBy), SORT_ASC, $storedData);
+	}
+	$returnArray['status'] = 'success';
+	$returnArray['message'] = 'Successfully sorted your data.';
+	$returnArray['all_data'] = array_splice($storedData,0,($start -1));
+	echo json_encode($returnArray); exit;
 }
