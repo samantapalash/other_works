@@ -40,7 +40,7 @@ if(isset($_POST['add_edit']) && $_POST['add_edit'] == 1) { //For add a new user
 		'id' => $_POST['edit_id'],
 		'address' => $_POST['address'],
 		'gender' => $_POST['gender'],
-		'file' => $_POST['file'],
+		'file' => ($_POST['file'] != "") ? $_POST['file'] : $storedData[$key]['file'],
 		'session_id' => $_POST['session_id'],
 	);
 	$storedData[$key] = $newData;
